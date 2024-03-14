@@ -1,6 +1,7 @@
 FROM ghcr.io/abetlen/llama-cpp-python:latest@sha256:b6d21ff8c4d9baad65e1fa741a0f8c898d68735fff3f3cd777e3f0c6a1839dd4
+RUN mkdir -p /piers
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl git supervisor make && \
+    apt-get install -y --no-install-recommends curl wget git supervisor make && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     pip3 install --no-cache-dir cython numpy mmh3 requests
@@ -13,6 +14,8 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir /lick
 COPY ./lick/noun.py /lick
 COPY ./lick/lick-ai-interface.py /lick
+COPY run.sh /app/
+RUN chmod +x /app/run.sh
 WORKDIR /app
-COPY ./api/run.sh /app
+ENV PYTHONUNBUFFERED=1
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

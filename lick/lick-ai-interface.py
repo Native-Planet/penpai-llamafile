@@ -125,6 +125,7 @@ while True:
     except KeyboardInterrupt:
         sys.exit()
         pass
-    except Exception:
-        print("something crashed restarting")
+    except Exception as e:
+        print(f"Crash: {e} restarting")
+        time.sleep(1)
         pass
