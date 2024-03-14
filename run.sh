@@ -13,11 +13,11 @@ verify_hash() {
     fi
 }
 
-model="$MODEL"
+model="$MODEL_NAME"
 
 if [ -z "$model" ]; then
     echo "Supported models are mistral-7b, mixtral-8x7b, wizardoder-34b,
-    wizardcoder13b, llava-1.5, tinyllama-1.1b, rocket-3b" 
+    wizardcoder13b, llava-1.5, tinyllama-1.1b, rocket-3b"
     echo "No model value provided. Defaulting to mistral-7b"
     model="Mistral-7B-Instruct"
 fi
@@ -77,5 +77,6 @@ else
     echo "Model file $MODEL_NAME does not exist. Downloading..."
     wget -q -O "$FILE_PATH" "$MODEL_DOWNLOAD_URL" || { echo "Failed to download model."; exit 1; }
 fi
+chmod +x ${FILE_PATH}
 echo "Running ${MODEL_NAME}..."
-/bin/sh -c ./${MODEL_NAME}
+/bin/sh -c ${FILE_PATH} --nobrowser --host 0.0.0.0
